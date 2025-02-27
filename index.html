@@ -81,6 +81,7 @@
               </div>
             </div>
 
+            <!-- Wrist Size -->
             <div class="mt-2">
               <span class="text-sm font-semibold text-gray-700"
                 >Wrist Size</span
@@ -149,22 +150,21 @@
         </div>
 
         <!-- Checkout Button Container (Centered Below Image & Text) -->
-        <div
-          id="checkout-container"
-          class="mt-6 flex justify-center w-full hidden"
-        >
-          <button
-            id="checkout-btn"
-            class="px-6 py-2 bg-orange-400 text-white rounded-3xl shadow-lg hover:bg-orange-500 flex items-center"
-          >
-            Checkout
-            <span
-              class="ml-2 bg-white text-orange-500 rounded-lg w-6 h-6 flex items-center justify-center text-xs font-bold"
-              id="cart-count"
+        <div id="checkout-container" class="mt-6 hidden">
+          <div class="flex justify-center w-full">
+            <button
+              id="checkout-btn"
+              class="px-6 py-2 bg-orange-400 text-white rounded-3xl shadow-lg hover:bg-orange-500 flex items-center"
             >
-              0
-            </span>
-          </button>
+              Checkout
+              <span
+                class="ml-2 bg-white text-orange-500 rounded-lg w-6 h-6 flex items-center justify-center text-xs font-bold"
+                id="cart-count"
+              >
+                0
+              </span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
