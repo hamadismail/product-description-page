@@ -48,16 +48,16 @@ for (const btn of btnQuantity) {
 // Add to cart
 let cartCnt = 0;
 let cartItems = [];
+let totalPrices = 0;
+const totalPriceElement = document.createElement('tr');
+totalPriceElement.classList.add('font-semibold');
+
 const btnCart = document.getElementById('add-to-cart');
 btnCart.addEventListener('click', e => {
   const checkoutContainer = document.getElementById('checkout-container');
   const quantity = parseInt(document.getElementById('quantity').innerText);
 
   if (quantity > 0) {
-    checkoutContainer.classList.remove('hidden');
-    cartCnt += quantity;
-    document.getElementById('cart-count').innerText = cartCnt;
-
     const selectedColorBtn = document.querySelector(
       'button.border-purple-600.w-6'
     );
@@ -65,22 +65,85 @@ btnCart.addEventListener('click', e => {
       'button.border-purple-600:not(.w-6)'
     );
 
+    if (!selectedSizeBtn) {
+      alert('Please select a size...');
+      return;
+    }
+
     const selectedColor = selectedColorBtn.id.split('-')[0];
     const selectedSize = selectedSizeBtn.innerText.split(' ')[0];
     const selectedPrice = parseInt(
       selectedSizeBtn.innerText.split(' ')[1].split('$')[1]
     );
 
+    checkoutContainer.classList.remove('hidden');
+    cartCnt += quantity;
+    document.getElementById('cart-count').innerText = cartCnt;
+
+    // Capitalize Color String
+    const firstLetter = selectedColor[0];
+    const remainingLetter = selectedColor.slice(1);
+    const firstLetterCap = firstLetter.toUpperCase();
+    const capitalizedWord = firstLetterCap + remainingLetter;
+
     cartItems.push({
-      image: selectedColor + '.png',
+      image: `../images/${selectedColor}.png`,
       title: 'Classy Modern Smart Watch',
-      color: selectedColor,
+      color: capitalizedWord,
       size: selectedSize,
+      quantity: quantity,
       price: quantity * selectedPrice,
     });
-
-    console.log(cartItems);
   } else {
     alert('Please select allest 1 item...');
   }
+
+  // Calculating total items
+  for (const price of cartItems) {
+    totalPrices += price.price;
+  }
+
+  totalPriceElement.innerHTML = `
+  <td class="py-2 px-4">Total</td>
+  <td></td>
+  <td></td>
+  <td class="py-2 px-4 text-center">${cartCnt}</td>
+  <td class="col-span-3 py-2 px-4 text-center">$${totalPrices}</td>
+  `;
+});
+
+// Checkout modal
+document.getElementById('checkout-btn').addEventListener('click', e => {
+  document.getElementById('cart-modal').classList.remove('hidden');
+
+  const cartContainer = document.getElementById('cart-items');
+
+  for (let i = 0; i < cartItems.length; i++) {
+    const row = document.createElement('tr');
+    row.classList.add('border-b');
+    const item = cartItems[i];
+    row.innerHTML = `
+    <td> 
+      <div class="flex items-center space-x-2"> 
+        <img class ="h-10 w-12 object-cover rounded-md my-1" src='${item.image}'>
+        <span class="font-semibold">${item.title}</span>
+      </div>
+    </td>
+    <td class="py-2 px-4 text-center">${item.color}</td>
+    <td class="py-2 px-4 text-center">${item.size}</td>
+    <td class="py-2 px-4 text-center">${item.quantity}</td>
+    <td class="py-2 px-4 text-center">$${item.price}</td>
+    `;
+    cartContainer.appendChild(row);
+  }
+  cartContainer.appendChild(totalPriceElement);
+  cartItems = [];
+});
+
+document.getElementById('continue-shopping').addEventListener('click', () => {
+  document.getElementById('cart-modal').classList.add('hidden');
+});
+
+document.getElementById('checkout').addEventListener('click', () => {
+  alert(`Please pay amount $${totalPrices}`);
 });
